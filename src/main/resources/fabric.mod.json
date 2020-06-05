@@ -2,7 +2,7 @@
   "schemaVersion": 1,
   "id": "hammerbot",
   "version": "${version}",
-  "name": "Hammerbot",
+  "name": "HammerBot",
   "description": "HammerSMP's bot for scoreboards/discord",
   "authors": [
     "AMereBagatelle"
@@ -12,7 +12,7 @@
   "environment": "*",
   "entrypoints": {
     "main": [
-      "hammer.hammerbot.Hammerbot"
+      "hammer.hammerbot.HammerBot"
     ]
   },
   "mixins": [
