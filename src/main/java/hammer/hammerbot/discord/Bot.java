@@ -11,7 +11,7 @@ public class Bot {
 
     public Bot() {
         try {
-            bot = JDABuilder.createDefault("Njk2NTE0ODkwMzYxMzM5OTM0.Xtt_Mw.zn6U2jajIjnCVGUzoB4EP9fEmYQ").build(); //TODO: Get actual bot token settings working
+            bot = JDABuilder.createDefault("").build(); //TODO: Get actual bot token settings working
             bot.addEventListener(new CommandMessageListener());
             bot.awaitReady();
             botActive = true;
