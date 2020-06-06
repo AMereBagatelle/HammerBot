@@ -1,5 +1,6 @@
 package hammer.hammerbot.discord;
 
+import hammer.hammerbot.HammerBot;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 
@@ -11,7 +12,7 @@ public class Bot {
 
     public Bot() {
         try {
-            bot = JDABuilder.createDefault("").build(); //TODO: Get actual bot token settings working
+            bot = JDABuilder.createDefault(HammerBot.settingsManager.loadSettingOrDefault("botToken", "")).build(); //TODO: Get actual bot token settings working
             bot.addEventListener(new CommandMessageListener());
             bot.awaitReady();
             botActive = true;
