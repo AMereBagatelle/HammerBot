@@ -5,8 +5,6 @@ import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.text.LiteralText;
 
-import java.util.ArrayList;
-
 public class Scoreboards {
     public static void setScoreboardByName(String name) {
         MinecraftServer server = (MinecraftServer)FabricLoader.getInstance().getGameInstance();
