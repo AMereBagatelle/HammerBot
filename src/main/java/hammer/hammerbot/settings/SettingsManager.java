@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class SettingsManager {
+    public static SettingsManager INSTANCE = new SettingsManager();
     public String[][] settings = new String[][]{
             {"botToken", ""},
             {"serverType", "SMP"}
