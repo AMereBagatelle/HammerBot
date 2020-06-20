@@ -3,7 +3,6 @@
   "package": "hammer.hammerbot.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
-    "ChatListenerMixin"
   ],
   "client": [
   ],
