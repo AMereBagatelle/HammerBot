@@ -40,18 +40,20 @@ public class MainCommandListener extends ListenerAdapter {
                     }
                 }
             }
+        } else {
+            event.getChannel().sendMessage("Server is null!  Is it not up yet?").queue();
         }
     }
 
     public void sendOnlineListMessage(MessageChannel channel) {
         MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
         String[] players = server.getPlayerManager().getPlayerNames();
-        StringBuilder finalMessage = new StringBuilder("Currently online players:\n");
+        StringBuilder finalMessage = new StringBuilder(String.format("Currently online players on %s:\n", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
         for (String player : players) {
             finalMessage.append(player).append("\n");
         }
         if(players.length == 0) {
-            finalMessage = new StringBuilder("No players currently online!");
+            finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
         }
         channel.sendMessage(finalMessage.toString()).queue();
     }
