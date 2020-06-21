@@ -1,8 +1,8 @@
 package hammer.hammerbot.bot;
 
-import hammer.hammerbot.bot.cmpcopy.CMPCopyCommandListener;
-import hammer.hammerbot.bot.cmpflat.CMPFlatCommandListener;
-import hammer.hammerbot.bot.smp.SMPCommandListener;
+import hammer.hammerbot.bot.listener.CMPCopyCommandListener;
+import hammer.hammerbot.bot.listener.CMPFlatCommandListener;
+import hammer.hammerbot.bot.listener.SMPCommandListener;
 import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;

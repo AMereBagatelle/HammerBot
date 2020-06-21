@@ -1,4 +1,4 @@
-package hammer.hammerbot.bot;
+package hammer.hammerbot.bot.listener;
 
 import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.entities.Message;
