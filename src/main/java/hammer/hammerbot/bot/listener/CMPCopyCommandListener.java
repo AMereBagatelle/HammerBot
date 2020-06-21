@@ -1,6 +1,5 @@
 package hammer.hammerbot.bot.listener;
 
-import hammer.hammerbot.bot.listener.MainCommandListener;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 
 import javax.annotation.Nonnull;
