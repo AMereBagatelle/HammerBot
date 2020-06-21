@@ -58,15 +58,15 @@ public class MainCommandListener extends ListenerAdapter {
         channel.sendMessage(finalMessage.toString()).queue();
     }
 
-    public void whitelistPlayer(String player, MessageChannel eventChannel) { // you were in the process of making feedback
+    public void whitelistPlayer(String player, MessageChannel eventChannel) {
         MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
         server.enqueueCommand("whitelist add " + player, server.getCommandSource());
-        eventChannel.sendMessage(String.format("Player %s Added", player)).queue();
+        eventChannel.sendMessage(String.format("Player %s removed from %s", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
     }
 
     public void removePlayerFromWhitelist(String player, MessageChannel eventChannel) {
         MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
         server.enqueueCommand("whitelist remove " + player, server.getCommandSource());
-        eventChannel.sendMessage(String.format("Player %s Added", player)).queue();
+        eventChannel.sendMessage(String.format("Player %s removed from %s.", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
     }
 }
