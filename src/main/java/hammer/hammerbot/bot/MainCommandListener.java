@@ -1,5 +1,6 @@
 package hammer.hammerbot.bot;
 
+import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
@@ -13,26 +14,29 @@ import javax.annotation.Nonnull;
 public class MainCommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
-        Message message = event.getMessage();
-        String content = message.getContentRaw();
-        if(content.startsWith("/")) {
-            String formattedContent = content.substring(1);
-            // Member-only commands
-            if(event.getMember().getRoles().contains(event.getGuild().getRoleById(""))) { //TODO Another setting
-                if(formattedContent.equals("online")) {
-                    sendOnlineListMessage(event.getChannel());
+        SettingsManager settingsManager = SettingsManager.INSTANCE;
+        if(FabricLoader.getInstance().getGameInstance() != null) {
+            Message message = event.getMessage();
+            String content = message.getContentRaw();
+            if (content.startsWith("/")) {
+                String formattedContent = content.substring(1);
+                // Member-only commands
+                if (event.getMember().getRoles().contains(event.getGuild().getRoleById(settingsManager.loadSettingOrDefault("memberRoleId", "")))) { //TODO Another setting
+                    if (formattedContent.equals("online")) {
+                        sendOnlineListMessage(event.getChannel());
+                    }
                 }
-            }
-            // Admin-only commands
-            if(event.getMember().getRoles().contains(event.getGuild().getRoleById("711894618027065405" ))) { //TODO Another setting
-                if(formattedContent.startsWith("whitelist")) {
-                    String nextCommand = formattedContent.substring("whitelist".length()+1);
-                    if(nextCommand.startsWith("add")) {
-                        String player = nextCommand.substring("add".length()+1);
-                        whitelistPlayer(player, event.getChannel());
-                    } else if(nextCommand.startsWith("remove")) {
-                        String player = nextCommand.substring("remove".length()+1);
-                        removePlayerFromWhitelist(player, event.getChannel());
+                // Admin-only commands
+                if (event.getMember().getRoles().contains(event.getGuild().getRoleById(settingsManager.loadSettingOrDefault("adminRoleId", "")))) { //TODO Another setting
+                    if (formattedContent.startsWith("whitelist")) {
+                        String nextCommand = formattedContent.substring("whitelist".length() + 1);
+                        if (nextCommand.startsWith("add")) {
+                            String player = nextCommand.substring("add".length() + 1);
+                            whitelistPlayer(player, event.getChannel());
+                        } else if (nextCommand.startsWith("remove")) {
+                            String player = nextCommand.substring("remove".length() + 1);
+                            removePlayerFromWhitelist(player, event.getChannel());
+                        }
                     }
                 }
             }

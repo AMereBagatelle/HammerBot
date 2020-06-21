@@ -9,7 +9,9 @@ public class SettingsManager {
     public static SettingsManager INSTANCE = new SettingsManager();
     public String[][] settings = new String[][]{
             {"botToken", ""},
-            {"serverType", "SMP"}
+            {"serverType", "SMP"},
+            {"memberRoleId", ""},
+            {"adminRoleId", ""}
     };
 
     public static File settingsFile = new File("hammerbot.properties");

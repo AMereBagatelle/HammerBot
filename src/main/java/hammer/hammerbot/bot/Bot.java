@@ -39,7 +39,7 @@ public class Bot {
             }
             bot.awaitReady();
         } catch (LoginException | InterruptedException e) {
-            e.printStackTrace();
+            LOGGER.info(e.getStackTrace());
         }
     }
 }
