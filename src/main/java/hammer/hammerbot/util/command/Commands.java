@@ -9,8 +9,8 @@ public class Commands {
             desc = "Whitelisting command.",
             permittedServers = {"CMPFLAT"}
     )
-    public void whitelist(boolean add, String player) {
-        currentChannel.sendMessage("Whitelist").queue();
+    public void whitelist(String add, String player) {
+        currentChannel.sendMessage("Whitelist " + add + " " + player).queue();
     }
 
 }

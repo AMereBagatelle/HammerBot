@@ -2,7 +2,7 @@ package hammer.hammerbot.util.command;
 
 import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.User;
+import net.dv8tion.jda.api.entities.Member;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -51,13 +51,13 @@ public class CommandManager {
         String message = event.getMessage().getContentRaw();
         try {
             if (message.startsWith("/")) {
-                message = message.substring(2);
+                message = message.substring(1);
                 for (ParsedCommand command : activeCommands.values()) {
                     if (message.startsWith(command.getName()) && checkPermittedServer(command) && checkPermissionLevel(event, command)) {
-                        message = message.substring(message.indexOf(command.getName() + 2));
+                        message = message.substring(command.getName().length() + 1);
                         String[] arguments = message.split("\\s");
                         Commands.currentChannel = event.getChannel();
-                        command.getMethod().invoke(Commands.class, arguments);
+                        command.getMethod().invoke(Commands.class.newInstance(), arguments);
                     }
                 }
             }
@@ -73,7 +73,7 @@ public class CommandManager {
     }
 
     public boolean checkPermissionLevel(MessageReceivedEvent event, ParsedCommand command) {
-        User user = (User) event.getMember();
+        Member member = event.getMember();
         Guild guild = event.getGuild();
         boolean result = false;
         switch (command.getPermissionLevel()) {
@@ -81,31 +81,31 @@ public class CommandManager {
                 result = true;
 
             case COMRADE:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("comradeRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("comradeRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
 
             case MEMBER:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
 
             case ADMIN:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(user)) {
+                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
                     result = true;
                     break;
                 }
