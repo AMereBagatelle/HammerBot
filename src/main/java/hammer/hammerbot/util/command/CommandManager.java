@@ -54,8 +54,11 @@ public class CommandManager {
                 message = message.substring(1);
                 for (ParsedCommand command : activeCommands.values()) {
                     if (message.startsWith(command.getName()) && checkPermittedServer(command) && checkPermissionLevel(event, command)) {
-                        message = message.substring(command.getName().length() + 1);
-                        String[] arguments = message.split("\\s");
+                        String[] arguments = null;
+                        if (message.length() != command.getName().length()) {
+                            message = message.substring(command.getName().length());
+                            arguments = message.split("\\s");
+                        }
                         Commands.currentChannel = event.getChannel();
                         command.getMethod().invoke(Commands.class.newInstance(), arguments);
                     }

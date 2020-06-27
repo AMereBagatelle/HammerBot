@@ -25,6 +25,7 @@ public class Bot {
 
                 case "CMPFLAT":
                     commandManager.registerCommand("whitelist", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     break;
 
                 case "CMPCOPY":
