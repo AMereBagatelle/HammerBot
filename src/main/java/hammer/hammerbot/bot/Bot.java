@@ -21,14 +21,16 @@ public class Bot {
             CommandManager commandManager = CommandManager.INSTANCE;
             switch (SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
                 case "SMP":
-                    break;
-
-                case "CMPFLAT":
-                    commandManager.registerCommand("whitelist", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("whitelist", CommandManager.Roles.ADMIN);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     break;
 
+                case "CMPFLAT":
+
                 case "CMPCOPY":
+                    commandManager.registerCommand("whitelist", CommandManager.Roles.MEMBER);
+                    commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("uploadFile", CommandManager.Roles.MEMBER);
                     break;
 
                 default:

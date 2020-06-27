@@ -56,14 +56,17 @@ public class CommandManager {
                     if (message.startsWith(command.getName()) && checkPermittedServer(command) && checkPermissionLevel(event, command)) {
                         String[] arguments = null;
                         if (message.length() != command.getName().length()) {
-                            message = message.substring(command.getName().length());
+                            message = message.substring(command.getName().length() + 1);
                             arguments = message.split("\\s");
                         }
-                        Commands.currentChannel = event.getChannel();
+                        Commands.currentEvent = event;
                         command.getMethod().invoke(Commands.class.newInstance(), arguments);
                     }
                 }
             }
+        } catch (IllegalArgumentException e) {
+            LOGGER.info("Discord command not executed: Wrong amount of arguments!");
+            event.getChannel().sendMessage("Command could not be executed: Wrong number of arguments.").queue();
         } catch (Exception e) {
             LOGGER.info("Discord command not executed: There was a unexpected exception!");
             event.getChannel().sendMessage("Command could not be executed.").queue();
@@ -84,31 +87,19 @@ public class CommandManager {
                 result = true;
 
             case COMRADE:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("comradeRoleId", 0))).contains(member)) {
-                    result = true;
-                    break;
-                }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(member)) {
-                    result = true;
-                    break;
-                }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("comradeRoleId", 0)))) {
                     result = true;
                     break;
                 }
 
             case MEMBER:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0))).contains(member)) {
-                    result = true;
-                    break;
-                }
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0)))) {
                     result = true;
                     break;
                 }
 
             case ADMIN:
-                if (guild.getMembersWithRoles(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0))).contains(member)) {
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0)))) {
                     result = true;
                     break;
                 }

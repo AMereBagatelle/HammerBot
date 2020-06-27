@@ -1,13 +1,16 @@
 package hammer.hammerbot.util.command;
 
 import hammer.hammerbot.settings.SettingsManager;
-import net.dv8tion.jda.api.entities.MessageChannel;
+import net.dv8tion.jda.api.entities.Message;
+import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
+import java.io.File;
+
 public class Commands {
-    public static MessageChannel currentChannel;
+    public static MessageReceivedEvent currentEvent;
 
     @Command(
             desc = "Whitelisting command for servers. Structure: /whitelist server <add/remove> player",
@@ -18,11 +21,11 @@ public class Commands {
             if (addOrRemove.equals("add")) {
                 MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
                 server.enqueueCommand("whitelist add " + player, server.getCommandSource());
-                currentChannel.sendMessage(String.format("Player %s removed from %s", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
+                currentEvent.getChannel().sendMessage(String.format("Player %s added to %s", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
             } else if (addOrRemove.equals("remove")) {
                 MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
                 server.enqueueCommand("whitelist remove " + player, server.getCommandSource());
-                currentChannel.sendMessage(String.format("Player %s removed from %s.", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
+                currentEvent.getChannel().sendMessage(String.format("Player %s removed from %s.", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
             } else {
                 throw new Exception("Invalid argument(s)");
             }
@@ -43,7 +46,17 @@ public class Commands {
         if (players.length == 0) {
             finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
         }
-        currentChannel.sendMessage(finalMessage.toString()).queue();
+        currentEvent.getChannel().sendMessage(finalMessage.toString()).queue();
+    }
+
+    public static void uploadFile() {
+        for (Message.Attachment fileAttachment : currentEvent.getMessage().getAttachments()) {
+            String fileExtension = fileAttachment.getFileExtension();
+            if (fileExtension.equals("sc")) {
+                File downloadPath = new File("world/scripts/" + fileAttachment.getFileName());
+                fileAttachment.downloadToFile(downloadPath);
+            }
+        }
     }
 
 }
