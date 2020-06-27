@@ -17,7 +17,7 @@ public class Commands {
             permittedServers = {"CMPFLAT", "CMPCOPY", "SMP"}
     )
     public static void whitelist(String serverType, String addOrRemove, String player) throws Exception {
-        if (serverType.equals(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
             if (addOrRemove.equals("add")) {
                 MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
                 server.enqueueCommand("whitelist add " + player, server.getCommandSource());
@@ -36,25 +36,34 @@ public class Commands {
             desc = "Prints out currently online players on the server.",
             permittedServers = {"SMP", "CMPCOPY", "CMPFLAT"}
     )
-    public static void online() {
-        MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
-        String[] players = server.getPlayerManager().getPlayerNames();
-        StringBuilder finalMessage = new StringBuilder(String.format("Currently online players on %s:\n", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
-        for (String player : players) {
-            finalMessage.append(player).append("\n");
+    public static void online(String serverType) {
+        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+            MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+            String[] players = server.getPlayerManager().getPlayerNames();
+            StringBuilder finalMessage = new StringBuilder(String.format("Currently online players on %s:\n", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
+            for (String player : players) {
+                finalMessage.append(player).append("\n");
+            }
+            if (players.length == 0) {
+                finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
+            }
+            currentEvent.getChannel().sendMessage(finalMessage.toString()).queue();
         }
-        if (players.length == 0) {
-            finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
-        }
-        currentEvent.getChannel().sendMessage(finalMessage.toString()).queue();
     }
 
-    public static void uploadFile() {
-        for (Message.Attachment fileAttachment : currentEvent.getMessage().getAttachments()) {
-            String fileExtension = fileAttachment.getFileExtension();
-            if (fileExtension.equals("sc")) {
-                File downloadPath = new File("world/scripts/" + fileAttachment.getFileName());
-                fileAttachment.downloadToFile(downloadPath);
+    @Command(
+            desc = "Uploads a file (scarpet script, schematic, etc) that is attached to the message to the server.",
+            permittedServers = {"CMPFLAT", "CMPCOPY"}
+    )
+    public static void uploadFile(String serverType) {
+        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+            for (Message.Attachment fileAttachment : currentEvent.getMessage().getAttachments()) {
+                String fileExtension = fileAttachment.getFileExtension();
+                if (fileExtension.equals("sc")) {
+                    File downloadPath = new File("world/scripts/" + fileAttachment.getFileName());
+                    fileAttachment.downloadToFile(downloadPath);
+                }
+                currentEvent.getChannel().sendMessage("Uploaded file " + fileAttachment.getFileName() + " to " + serverType).queue();
             }
         }
     }

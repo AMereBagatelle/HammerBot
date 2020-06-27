@@ -1,6 +1,5 @@
 package hammer.hammerbot.bot;
 
-import hammer.hammerbot.bot.listener.MainCommandListener;
 import hammer.hammerbot.settings.SettingsManager;
 import hammer.hammerbot.util.command.CommandManager;
 import net.dv8tion.jda.api.JDA;
@@ -17,7 +16,7 @@ public class Bot {
     public Bot() {
         try {
             bot = JDABuilder.createDefault(SettingsManager.INSTANCE.loadSettingOrDefault("botToken", "")).build();
-            bot.addEventListener(new MainCommandListener());
+            bot.addEventListener(new CommandListener());
             CommandManager commandManager = CommandManager.INSTANCE;
             switch (SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
                 case "SMP":
