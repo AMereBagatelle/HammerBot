@@ -1,8 +1,6 @@
 package hammer.hammerbot.settings;
 
 import java.io.*;
-import java.nio.file.Files;
-import java.util.ArrayList;
 import java.util.Properties;
 
 public class SettingsManager {
@@ -11,7 +9,9 @@ public class SettingsManager {
             {"botToken", ""},
             {"serverType", "SMP"},
             {"memberRoleId", ""},
-            {"adminRoleId", ""}
+            {"adminRoleId", ""},
+            {"comradeRoleId", ""},
+            {"commandPrefix", "/"}
     };
 
     public static File settingsFile = new File("hammerbot.properties");
@@ -74,10 +74,14 @@ public class SettingsManager {
     }
 
     public boolean loadBooleanSettingOrDefault(String setting, boolean normal) {
-        return Boolean.parseBoolean(loadSettingOrDefault(setting,  Boolean.toString(normal)));
+        return Boolean.parseBoolean(loadSettingOrDefault(setting, Boolean.toString(normal)));
     }
 
     public int loadIntSettingOrDefault(String setting, int normal) {
         return Integer.parseInt(loadSettingOrDefault(setting, Integer.toString(normal)));
+    }
+
+    public long loadLongSettingOrDefault(String setting, long normal) {
+        return Long.parseLong(loadSettingOrDefault(setting, Long.toString(normal)));
     }
 }

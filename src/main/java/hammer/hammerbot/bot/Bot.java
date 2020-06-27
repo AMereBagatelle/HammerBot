@@ -1,9 +1,8 @@
 package hammer.hammerbot.bot;
 
-import hammer.hammerbot.bot.listener.CMPCopyCommandListener;
-import hammer.hammerbot.bot.listener.CMPFlatCommandListener;
-import hammer.hammerbot.bot.listener.SMPCommandListener;
+import hammer.hammerbot.bot.listener.MainCommandListener;
 import hammer.hammerbot.settings.SettingsManager;
+import hammer.hammerbot.util.command.CommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import org.apache.logging.log4j.LogManager;
@@ -13,25 +12,23 @@ import javax.security.auth.login.LoginException;
 
 public class Bot {
     private JDA bot;
-    private Logger LOGGER = LogManager.getLogger();
+    private final Logger LOGGER = LogManager.getLogger();
 
     public Bot() {
         try {
             bot = JDABuilder.createDefault(SettingsManager.INSTANCE.loadSettingOrDefault("botToken", "")).build();
-            switch(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
+            bot.addEventListener(new MainCommandListener());
+            CommandManager commandManager = CommandManager.INSTANCE;
+            switch (SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
                 case "SMP":
-                    bot.addEventListener(new SMPCommandListener());
-                    LOGGER.info("SMP bot activated.");
                     break;
 
                 case "CMPFLAT":
-                    bot.addEventListener(new CMPFlatCommandListener());
-                    LOGGER.info("CMPFLAT bot activated.");
+                    commandManager.registerCommand("whitelist", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     break;
 
                 case "CMPCOPY":
-                    bot.addEventListener(new CMPCopyCommandListener());
-                    LOGGER.info("CMPCOPY bot activated.");
                     break;
 
                 default:

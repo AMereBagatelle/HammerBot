@@ -1,7 +1,7 @@
 package hammer.hammerbot.bot.listener;
 
 import hammer.hammerbot.settings.SettingsManager;
-import net.dv8tion.jda.api.entities.Message;
+import hammer.hammerbot.util.command.CommandManager;
 import net.dv8tion.jda.api.entities.MessageChannel;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -14,6 +14,8 @@ import javax.annotation.Nonnull;
 public class MainCommandListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
+        CommandManager.INSTANCE.onCommand(event);
+        /*
         SettingsManager settingsManager = SettingsManager.INSTANCE;
         if(FabricLoader.getInstance().getGameInstance() != null) {
             Message message = event.getMessage();
@@ -43,6 +45,7 @@ public class MainCommandListener extends ListenerAdapter {
         } else {
             event.getChannel().sendMessage("Server is null!  Is it not up yet?").queue();
         }
+         */
     }
 
     public void sendOnlineListMessage(MessageChannel channel) {
