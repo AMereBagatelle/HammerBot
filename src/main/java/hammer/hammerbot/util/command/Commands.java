@@ -61,9 +61,9 @@ public class Commands {
                 String fileExtension = fileAttachment.getFileExtension();
                 if (fileExtension.equals("sc")) {
                     File downloadPath = new File("world/scripts/" + fileAttachment.getFileName());
-                    fileAttachment.downloadToFile(downloadPath);
+                    fileAttachment.downloadToFile(downloadPath)
+                            .thenAccept(file -> currentEvent.getChannel().sendMessage("Uploaded file " + fileAttachment.getFileName() + " to " + serverType).queue());
                 }
-                currentEvent.getChannel().sendMessage("Uploaded file " + fileAttachment.getFileName() + " to " + serverType).queue();
             }
         }
     }
