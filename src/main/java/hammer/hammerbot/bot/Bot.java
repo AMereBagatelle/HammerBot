@@ -22,6 +22,7 @@ public class Bot {
                 case "SMP":
                     commandManager.registerCommand("whitelist", CommandManager.Roles.ADMIN);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("scoreboard", CommandManager.Roles.EVERYONE);
                     break;
 
                 case "CMPFLAT":

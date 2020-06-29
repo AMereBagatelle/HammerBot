@@ -4,6 +4,8 @@ import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.fabricmc.loader.api.FabricLoader;
+import net.minecraft.scoreboard.ScoreboardObjective;
+import net.minecraft.scoreboard.ScoreboardPlayerScore;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
@@ -67,6 +69,22 @@ public class Commands {
                             .thenAccept(file -> currentEvent.getChannel().sendMessage("Uploaded file " + fileAttachment.getFileName() + " to " + serverType).queue());
                 }
             }
+        }
+    }
+
+    @Command(
+            desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective`",
+            permittedServers = {"SMP"}
+    )
+    public static void scoreboard(String objective) {
+        MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+        ScoreboardObjective scoreboardObjective = server.getScoreboard().getNullableObjective(objective);
+        if (scoreboardObjective != null) {
+            Collection<ScoreboardPlayerScore> playerScores = server.getScoreboard().getAllPlayerScores(scoreboardObjective);
+            StringBuilder builder = new StringBuilder();
+            currentEvent.getChannel().sendMessage(builder.toString()).queue();
+        } else {
+            currentEvent.getChannel().sendMessage("Invalid objective.").queue();
         }
     }
 
