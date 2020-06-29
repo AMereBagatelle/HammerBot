@@ -8,12 +8,14 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.Collection;
 
 public class Commands {
     public static MessageReceivedEvent currentEvent;
 
     @Command(
-            desc = "Whitelisting command for servers. Structure: /whitelist server <add/remove> player",
+            desc = "Whitelisting command for servers. Usage: `/whitelist server <add/remove> player`.",
             permittedServers = {"CMPFLAT", "CMPCOPY", "SMP"}
     )
     public static void whitelist(String serverType, String addOrRemove, String player) throws Exception {
@@ -33,7 +35,7 @@ public class Commands {
     }
 
     @Command(
-            desc = "Prints out currently online players on the server.",
+            desc = "Prints out currently online players on the server.  Usage: `/online server`.",
             permittedServers = {"SMP", "CMPCOPY", "CMPFLAT"}
     )
     public static void online(String serverType) {
@@ -52,7 +54,7 @@ public class Commands {
     }
 
     @Command(
-            desc = "Uploads a file (scarpet script, schematic, etc) that is attached to the message to the server.",
+            desc = "Uploads a file (scarpet script, schematic, etc) that is attached to the message to the server.  Usage: `/uploadFile server` (attach the file you would like to upload).",
             permittedServers = {"CMPFLAT", "CMPCOPY"}
     )
     public static void uploadFile(String serverType) {
@@ -68,4 +70,16 @@ public class Commands {
         }
     }
 
+    @Command(
+            desc = "Help command.  Lists commands and descriptions.  Usage: `/help`.",
+            permittedServers = {"CMPFLAT"}
+    )
+    public static void help() {
+        Collection<ParsedCommand> commands = CommandManager.INSTANCE.commands.values();
+        StringBuilder stringBuilder = new StringBuilder("Commands:\n");
+        for (ParsedCommand command : commands) {
+            stringBuilder.append(command.getName()).append(": ").append(command.getDescription()).append(" Allowed on ").append(Arrays.toString(command.getPermittedServers())).append("\n");
+        }
+        currentEvent.getChannel().sendMessage(stringBuilder.toString()).queue();
+    }
 }
