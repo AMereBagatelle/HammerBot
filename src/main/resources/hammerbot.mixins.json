@@ -3,6 +3,7 @@
   "package": "hammer.hammerbot.mixin",
   "compatibilityLevel": "JAVA_8",
   "mixins": [
+    "CommandManagerMixin"
   ],
   "client": [
   ],

@@ -73,7 +73,7 @@ public class Commands {
     }
 
     @Command(
-            desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective`",
+            desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective` CURRENTLY DISABLED", //TODO remove the disabled message when ready
             permittedServers = {"SMP"}
     )
     public static void scoreboard(String objective) {
