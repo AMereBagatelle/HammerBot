@@ -11,7 +11,8 @@ public class SettingsManager {
             {"memberRoleId", ""},
             {"adminRoleId", ""},
             {"comradeRoleId", ""},
-            {"commandPrefix", "/"}
+            {"commandPrefix", "/"},
+            {"linkChannelId", "728334101706440715"}
     };
 
     public static File settingsFile = new File("hammerbot.properties");

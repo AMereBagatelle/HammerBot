@@ -17,6 +17,7 @@ public class Bot {
         try {
             bot = JDABuilder.createDefault(SettingsManager.INSTANCE.loadSettingOrDefault("botToken", "")).build();
             bot.addEventListener(new CommandListener());
+            bot.addEventListener(new ChatbridgeListener());
             CommandManager commandManager = CommandManager.INSTANCE;
             switch (SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
                 case "SMP":
@@ -41,5 +42,9 @@ public class Bot {
         } catch (LoginException | InterruptedException e) {
             LOGGER.info(e.getStackTrace());
         }
+    }
+
+    public JDA getBot() {
+        return bot;
     }
 }

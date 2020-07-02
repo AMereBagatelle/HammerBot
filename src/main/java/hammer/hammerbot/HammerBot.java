@@ -7,10 +7,12 @@ import hammer.hammerbot.util.command.Commands;
 import net.fabricmc.api.DedicatedServerModInitializer;
 
 public class HammerBot implements DedicatedServerModInitializer {
+    public static Bot bot;
+
     @Override
     public void onInitializeServer() {
         SettingsManager.INSTANCE.initSettings();
         CommandManager.INSTANCE.parseCommandClass(Commands.class);
-        new Bot();
+        bot = new Bot();
     }
 }
