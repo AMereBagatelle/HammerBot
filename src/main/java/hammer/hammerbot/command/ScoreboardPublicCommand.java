@@ -17,7 +17,11 @@ public class ScoreboardPublicCommand {
                         .executes(ctx -> {
                             Scoreboards.setScoreboardByName(StringArgumentType.getString(ctx, "objective"), ctx.getSource().getPlayer());
                             return 1;
-                        }));
+                        }))
+                .executes(ctx -> {
+                    Scoreboards.listScoreboardObjectives(ctx.getSource().getPlayer());
+                    return 1;
+                });
 
         dispatcher.register(scoreboardPublic);
     }
