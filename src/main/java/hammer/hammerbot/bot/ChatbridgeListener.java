@@ -16,11 +16,11 @@ public class ChatbridgeListener extends ListenerAdapter {
         if (event.getChannel().getId().equals(SettingsManager.INSTANCE.loadSettingOrDefault("linkChannelId", "")) && !message.startsWith("[" + SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP") + "]")) {
             MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
             if (message.startsWith("[SMP]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[SMP] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw().substring(6))), false);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[SMP] %s", event.getMessage().getContentRaw().substring(6))), false);
             } else if (message.startsWith("[CMPFLAT]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPFLAT] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw().substring(10))), false);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPFLAT] %s", event.getMessage().getContentRaw().substring(10))), false);
             } else if (message.startsWith("[CMPCOPY]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPCOPY] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw().substring(10))), false);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPCOPY] %s", event.getMessage().getContentRaw().substring(10))), false);
             } else {
                 server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[DISCORD] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw())), false);
             }
