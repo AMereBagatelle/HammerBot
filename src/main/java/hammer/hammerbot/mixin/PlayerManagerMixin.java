@@ -2,6 +2,7 @@ package hammer.hammerbot.mixin;
 
 import hammer.hammerbot.HammerBot;
 import hammer.hammerbot.settings.SettingsManager;
+import hammer.hammerbot.util.MessageFormatting;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.minecraft.network.ClientConnection;
@@ -26,7 +27,7 @@ public class PlayerManagerMixin {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.INSTANCE.loadLongSettingOrDefault("linkChannelId", 0));
         if (linkChannel != null) {
-            linkChannel.sendMessage(String.format("[%s] %s joined the server", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"), player.getDisplayName().asFormattedString())).queue();
+            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s joined the server", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"), player.getDisplayName().asFormattedString()))).queue();
         }
     }
 
@@ -35,7 +36,7 @@ public class PlayerManagerMixin {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.INSTANCE.loadLongSettingOrDefault("linkChannelId", 0));
         if (linkChannel != null) {
-            linkChannel.sendMessage(String.format("[%s] %s left the server", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"), player.getDisplayName().asFormattedString())).queue();
+            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s left the server", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"), player.getDisplayName().asFormattedString()))).queue();
         }
     }
 }
