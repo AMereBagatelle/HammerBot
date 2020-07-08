@@ -10,7 +10,6 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
 import java.io.File;
-import java.util.Arrays;
 import java.util.Collection;
 
 public class Commands {
@@ -86,18 +85,5 @@ public class Commands {
         } else {
             currentEvent.getChannel().sendMessage("Invalid objective.").queue();
         }
-    }
-
-    @Command(
-            desc = "Help command.  Lists commands and descriptions.  Usage: `/help`.",
-            permittedServers = {"CMPFLAT"}
-    )
-    public static void help() {
-        Collection<ParsedCommand> commands = CommandManager.INSTANCE.commands.values();
-        StringBuilder stringBuilder = new StringBuilder("Commands:\n");
-        for (ParsedCommand command : commands) {
-            stringBuilder.append(command.getName()).append(": ").append(command.getDescription()).append(" Allowed on ").append(Arrays.toString(command.getPermittedServers())).append("\n");
-        }
-        currentEvent.getChannel().sendMessage(stringBuilder.toString()).queue();
     }
 }

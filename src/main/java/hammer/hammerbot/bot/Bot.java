@@ -32,7 +32,6 @@ public class Bot {
                     commandManager.registerCommand("whitelist", CommandManager.Roles.MEMBER);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     commandManager.registerCommand("uploadFile", CommandManager.Roles.MEMBER);
-                    commandManager.registerCommand("help", CommandManager.Roles.EVERYONE);
                     break;
 
                 default:
