@@ -86,4 +86,12 @@ public class Commands {
             currentEvent.getChannel().sendMessage("Invalid objective.").queue();
         }
     }
+
+    @Command(
+            desc = "Lets us know what servers are up.",
+            permittedServers = {"SMP", "CMPFLAT", "CMPCOPY"}
+    )
+    public static void ping() {
+        currentEvent.getChannel().sendMessage(String.format("%s is up!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))).queue();
+    }
 }
