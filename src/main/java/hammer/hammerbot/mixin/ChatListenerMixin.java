@@ -21,6 +21,9 @@ public class ChatListenerMixin {
     @Shadow
     public ServerPlayerEntity player;
 
+    /**
+     * Passes our chat message to the chat bridge.
+     */
     @Inject(method = "onChatMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
     public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
         String chatMessage = packet.getChatMessage();

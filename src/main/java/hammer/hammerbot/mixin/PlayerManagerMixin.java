@@ -22,6 +22,9 @@ public class PlayerManagerMixin {
     @Final
     private MinecraftServer server;
 
+    /**
+     * Sends player join message to chat bridge.
+     */
     @Inject(method = "onPlayerConnect", at = @At("TAIL"))
     public void sendPlayerConnect(ClientConnection connection, ServerPlayerEntity player, CallbackInfo ci) {
         JDA bot = HammerBot.bot.getBot();
@@ -31,6 +34,9 @@ public class PlayerManagerMixin {
         }
     }
 
+    /**
+     * Sends player disconnect message to chat bridge.
+     */
     @Inject(method = "remove", at = @At("TAIL"))
     public void sendPlayerDisconnect(ServerPlayerEntity player, CallbackInfo ci) {
         JDA bot = HammerBot.bot.getBot();

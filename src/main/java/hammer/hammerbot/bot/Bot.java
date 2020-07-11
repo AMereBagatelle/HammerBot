@@ -13,6 +13,10 @@ public class Bot {
     private JDA bot;
     private final Logger LOGGER = LogManager.getLogger();
 
+    /**
+     * Set up the bot.
+     * Has separate cases for each server to register commands for each server.  Also registers ChatbridgeListener.
+     */
     public Bot() {
         try {
             bot = JDABuilder.createDefault(SettingsManager.INSTANCE.loadSettingOrDefault("botToken", "")).build();

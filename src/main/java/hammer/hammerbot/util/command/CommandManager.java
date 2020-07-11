@@ -14,6 +14,9 @@ import java.util.HashMap;
 public class CommandManager {
     public static CommandManager INSTANCE = new CommandManager();
 
+    /**
+     * Represents possible permission levels.
+     */
     public enum Roles {
         ADMIN,
         MEMBER,
@@ -26,6 +29,11 @@ public class CommandManager {
     public HashMap<String, ParsedCommand> commands = new HashMap<>();
     private final HashMap<String, ParsedCommand> activeCommands = new HashMap<>();
 
+    /**
+     * Parses the Commands class to find all the commands that can be registered.
+     *
+     * @param toParse The class with the commands.
+     */
     public void parseCommandClass(Class toParse) {
         for (Method command : toParse.getDeclaredMethods()) {
             Command commandAnnotation = command.getAnnotation(Command.class);
@@ -35,6 +43,12 @@ public class CommandManager {
         }
     }
 
+    /**
+     * Registers a command to the discord bot.
+     *
+     * @param name            Command name to register.
+     * @param permissionLevel Permission level that the command should be assigned.
+     */
     public void registerCommand(String name, Roles permissionLevel) {
         ParsedCommand command = commands.get(name);
         if (command != null) {
@@ -47,10 +61,15 @@ public class CommandManager {
         activeCommands.remove(name);
     }
 
+    /**
+     * Processes the message as a command.
+     *
+     * @param event MessageEvent to process
+     */
     public void onCommand(MessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
         try {
-            if (message.startsWith("/")) {
+            if (message.startsWith(commandPrefix)) {
                 message = message.substring(1);
                 for (ParsedCommand command : activeCommands.values()) {
                     if (message.startsWith(command.getName()) && checkPermittedServer(command) && checkPermissionLevel(event, command)) {
@@ -73,11 +92,22 @@ public class CommandManager {
         }
     }
 
+    /**
+     * Checks whether the command is allowed on the server.
+     *
+     * @param command Command to check.
+     * @return True if the command should go ahead.
+     */
     public boolean checkPermittedServer(ParsedCommand command) {
         if (command.getPermittedServers().length == 0) return true;
         return Arrays.asList(command.getPermittedServers()).contains(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""));
     }
 
+    /**
+     * @param event   Message Event to check for permission.
+     * @param command Command to check for permission.
+     * @return True if they have permission.
+     */
     public boolean checkPermissionLevel(MessageReceivedEvent event, ParsedCommand command) {
         Member member = event.getMember();
         Guild guild = event.getGuild();

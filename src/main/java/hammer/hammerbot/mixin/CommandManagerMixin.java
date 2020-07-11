@@ -17,6 +17,9 @@ public class CommandManagerMixin {
     @Final
     private CommandDispatcher<ServerCommandSource> dispatcher;
 
+    /**
+     * Registers our command to the server.
+     */
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onRegister(boolean isDedicatedServer, CallbackInfo ci) {
         ScoreboardPublicCommand.register(dispatcher);
