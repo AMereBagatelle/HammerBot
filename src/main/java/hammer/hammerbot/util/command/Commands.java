@@ -81,6 +81,9 @@ public class Commands {
         if (scoreboardObjective != null) {
             Collection<ScoreboardPlayerScore> playerScores = server.getScoreboard().getAllPlayerScores(scoreboardObjective);
             StringBuilder builder = new StringBuilder();
+            for (ScoreboardPlayerScore playerScore : playerScores) {
+                builder.append(playerScore.getPlayerName()).append(": ").append(playerScore.getScore()).append("\n");
+            }
             currentEvent.getChannel().sendMessage(builder.toString()).queue();
         } else {
             currentEvent.getChannel().sendMessage("Invalid objective.").queue();
