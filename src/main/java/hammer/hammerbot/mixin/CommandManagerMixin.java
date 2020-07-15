@@ -1,6 +1,7 @@
 package hammer.hammerbot.mixin;
 
 import com.mojang.brigadier.CommandDispatcher;
+import hammer.hammerbot.command.PingCommand;
 import hammer.hammerbot.command.ScoreboardPublicCommand;
 import net.minecraft.server.command.CommandManager;
 import net.minecraft.server.command.ServerCommandSource;
@@ -23,5 +24,6 @@ public class CommandManagerMixin {
     @Inject(method = "<init>", at = @At("RETURN"))
     private void onRegister(boolean isDedicatedServer, CallbackInfo ci) {
         ScoreboardPublicCommand.register(dispatcher);
+        PingCommand.register(dispatcher);
     }
 }
