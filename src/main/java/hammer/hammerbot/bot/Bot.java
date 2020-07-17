@@ -28,6 +28,7 @@ public class Bot {
                     commandManager.registerCommand("whitelist", CommandManager.Roles.ADMIN);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     commandManager.registerCommand("scoreboard", CommandManager.Roles.EVERYONE);
+                    commandManager.registerCommand("ping", CommandManager.Roles.EVERYONE);
                     break;
 
                 case "CMPFLAT":
@@ -36,6 +37,7 @@ public class Bot {
                     commandManager.registerCommand("whitelist", CommandManager.Roles.MEMBER);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
                     commandManager.registerCommand("uploadFile", CommandManager.Roles.MEMBER);
+                    commandManager.registerCommand("ping", CommandManager.Roles.MEMBER);
                     break;
 
                 default:
