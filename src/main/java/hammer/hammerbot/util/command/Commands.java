@@ -1,6 +1,7 @@
 package hammer.hammerbot.util.command;
 
 import hammer.hammerbot.settings.SettingsManager;
+import hammer.hammerbot.util.Scoreboards;
 import net.dv8tion.jda.api.entities.Message;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.fabricmc.loader.api.FabricLoader;
@@ -84,7 +85,9 @@ public class Commands {
             builder.append("```css\n");
             builder.append("-------- ").append(objective).append(" --------\n");
             for (int i = playerScores.size() - 1; i > 0; i--) {
-                builder.append(playerScores.get(i).getPlayerName()).append(": ").append(playerScores.get(i).getScore()).append("\n");
+                if (Scoreboards.checkPlayerOnWhitelist(server, playerScores.get(i).getPlayerName())) {
+                    builder.append(playerScores.get(i).getPlayerName()).append(": ").append(playerScores.get(i).getScore()).append("\n");
+                }
             }
             builder.append("```");
             if (!builder.toString().equals("")) currentEvent.getChannel().sendMessage(builder.toString()).queue();

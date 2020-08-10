@@ -27,4 +27,13 @@ public class Scoreboards {
             player.sendChatMessage(new LiteralText(objective.getName()), MessageType.SYSTEM);
         }
     }
+
+    public static boolean checkPlayerOnWhitelist(MinecraftServer server, String nameToCheck) {
+        for (String name : server.getPlayerManager().getWhitelistedNames()) {
+            if (nameToCheck.equals(name)) {
+                return true;
+            }
+        }
+        return false;
+    }
 }
