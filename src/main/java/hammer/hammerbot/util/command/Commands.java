@@ -81,9 +81,12 @@ public class Commands {
         if (scoreboardObjective != null) {
             List<ScoreboardPlayerScore> playerScores = (List<ScoreboardPlayerScore>) server.getScoreboard().getAllPlayerScores(scoreboardObjective);
             StringBuilder builder = new StringBuilder();
+            builder.append("```css\n");
+            builder.append("-------- ").append(objective).append(" --------\n");
             for (int i = playerScores.size() - 1; i > 0; i--) {
                 builder.append(playerScores.get(i).getPlayerName()).append(": ").append(playerScores.get(i).getScore()).append("\n");
             }
+            builder.append("```");
             if (!builder.toString().equals("")) currentEvent.getChannel().sendMessage(builder.toString()).queue();
             else currentEvent.getChannel().sendMessage("No one has done that!");
         } else {
