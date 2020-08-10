@@ -13,15 +13,23 @@ public class ScoreboardPublicCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> scoreboardPublic = literal("scoreboardPublic")
-                .then(argument("objective", StringArgumentType.string())
+                .then(literal("set")
+                        .then(argument("objective", StringArgumentType.string())
+                                .executes(ctx -> {
+                                    Scoreboards.setScoreboardByName(StringArgumentType.getString(ctx, "objective"), ctx.getSource().getPlayer());
+                                    return 1;
+                                })))
+                .then(literal("ls")
                         .executes(ctx -> {
-                            Scoreboards.setScoreboardByName(StringArgumentType.getString(ctx, "objective"), ctx.getSource().getPlayer());
+                            Scoreboards.listScoreboardObjectives(ctx.getSource().getPlayer());
                             return 1;
                         }))
-                .executes(ctx -> {
-                    Scoreboards.listScoreboardObjectives(ctx.getSource().getPlayer());
-                    return 1;
-                });
+                .then(literal("clear")
+                        .executes(ctx -> {
+                            Scoreboards.clearScoreboard();
+                            return 1;
+                        }));
+
 
         dispatcher.register(scoreboardPublic);
     }

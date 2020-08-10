@@ -28,6 +28,11 @@ public class Scoreboards {
         }
     }
 
+    public static void clearScoreboard() {
+        MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
+        server.getScoreboard().setObjectiveSlot(1, null);
+    }
+
     public static boolean checkPlayerOnWhitelist(MinecraftServer server, String nameToCheck) {
         for (String name : server.getPlayerManager().getWhitelistedNames()) {
             if (nameToCheck.equals(name)) {
