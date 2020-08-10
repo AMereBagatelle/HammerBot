@@ -10,7 +10,7 @@ import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.dedicated.MinecraftDedicatedServer;
 
 import java.io.File;
-import java.util.Collection;
+import java.util.List;
 
 public class Commands {
     public static MessageReceivedEvent currentEvent;
@@ -72,19 +72,20 @@ public class Commands {
     }
 
     @Command(
-            desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective` CURRENTLY DISABLED", //TODO remove the disabled message when ready
+            desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective`",
             permittedServers = {"SMP"}
     )
     public static void scoreboard(String objective) {
         MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
         ScoreboardObjective scoreboardObjective = server.getScoreboard().getNullableObjective(objective);
         if (scoreboardObjective != null) {
-            Collection<ScoreboardPlayerScore> playerScores = server.getScoreboard().getAllPlayerScores(scoreboardObjective);
+            List<ScoreboardPlayerScore> playerScores = (List<ScoreboardPlayerScore>) server.getScoreboard().getAllPlayerScores(scoreboardObjective);
             StringBuilder builder = new StringBuilder();
-            for (ScoreboardPlayerScore playerScore : playerScores) {
-                builder.append(playerScore.getPlayerName()).append(": ").append(playerScore.getScore()).append("\n");
+            for (int i = playerScores.size() - 1; i > 0; i--) {
+                builder.append(playerScores.get(i).getPlayerName()).append(": ").append(playerScores.get(i).getScore()).append("\n");
             }
-            currentEvent.getChannel().sendMessage(builder.toString()).queue();
+            if (!builder.toString().equals("")) currentEvent.getChannel().sendMessage(builder.toString()).queue();
+            else currentEvent.getChannel().sendMessage("No one has done that!");
         } else {
             currentEvent.getChannel().sendMessage("Invalid objective.").queue();
         }
