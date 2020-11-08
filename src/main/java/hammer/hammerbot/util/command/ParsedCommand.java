@@ -7,11 +7,21 @@ public class ParsedCommand {
     private final Command annotation;
     private final String name;
     private CommandManager.Roles permissionLevel;
+    private final String[] arguments;
 
     public ParsedCommand(Method method, Command annotation) {
         this.method = method;
         this.annotation = annotation;
         this.name = annotation.name().equals("") ? method.getName() : annotation.name();
+        this.arguments = annotation.arguments();
+    }
+
+    public String prettyPrintArguments() {
+        StringBuilder builder = new StringBuilder(" ");
+        for (String argument : arguments) {
+            builder.append("`").append(argument).append("` ");
+        }
+        return builder.toString();
     }
 
     public String getName() {

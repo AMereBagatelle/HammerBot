@@ -64,10 +64,11 @@ public class CommandManager {
      */
     public void onCommand(MessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
-        try {
-            if (message.startsWith(commandPrefix)) {
-                message = message.substring(1);
-                for (ParsedCommand command : activeCommands.values()) {
+
+        if (message.startsWith(commandPrefix)) {
+            message = message.substring(1);
+            for (ParsedCommand command : activeCommands.values()) {
+                try {
                     if (message.startsWith(command.getName()) && checkPermittedServer(command) && checkPermissionLevel(event, command)) {
                         String[] arguments = null;
                         if (message.length() != command.getName().length()) {
@@ -77,14 +78,14 @@ public class CommandManager {
                         Commands.currentEvent = event;
                         command.getMethod().invoke(Commands.class.newInstance(), arguments);
                     }
+                } catch (IllegalArgumentException e) {
+                    LOGGER.info("Discord command not executed: Wrong amount of arguments!");
+                    event.getChannel().sendMessage("Wrong arguments, expected: " + command.prettyPrintArguments()).queue();
+                } catch (Exception e) {
+                    LOGGER.info("Discord command not executed: There was a unexpected exception!", e);
+                    event.getChannel().sendMessage("Command could not be executed.").queue();
                 }
             }
-        } catch (IllegalArgumentException e) {
-            LOGGER.info("Discord command not executed: Wrong amount of arguments!");
-            event.getChannel().sendMessage("Command could not be executed: Wrong number of arguments.").queue();
-        } catch (Exception e) {
-            LOGGER.info("Discord command not executed: There was a unexpected exception!", e);
-            event.getChannel().sendMessage("Command could not be executed.").queue();
         }
     }
 
