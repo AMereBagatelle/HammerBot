@@ -22,7 +22,7 @@ public class CommandManagerMixin {
      * Registers our command to the server.
      */
     @Inject(method = "<init>", at = @At("RETURN"))
-    private void onRegister(boolean isDedicatedServer, CallbackInfo ci) {
+    private void onRegister(CommandManager.RegistrationEnvironment environment, CallbackInfo ci) {
         ScoreboardPublicCommand.register(dispatcher);
         PingCommand.register(dispatcher);
     }
