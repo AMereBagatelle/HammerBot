@@ -20,12 +20,12 @@ public class CommandManager {
     public enum Roles {
         ADMIN,
         MEMBER,
-        COMRADE,
+        FRIEND,
         EVERYONE
     }
 
     public static final Logger LOGGER = LogManager.getLogger();
-    public String commandPrefix = SettingsManager.INSTANCE.loadSettingOrDefault("commandPrefix", "");
+    public String commandPrefix = SettingsManager.settings.commandPrefix;
     public HashMap<String, ParsedCommand> commands = new HashMap<>();
     private final HashMap<String, ParsedCommand> activeCommands = new HashMap<>();
 
@@ -96,7 +96,7 @@ public class CommandManager {
      */
     public boolean checkPermittedServer(ParsedCommand command) {
         if (command.getPermittedServers().length == 0) return true;
-        return Arrays.asList(command.getPermittedServers()).contains(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""));
+        return Arrays.asList(command.getPermittedServers()).contains(SettingsManager.settings.serverType);
     }
 
     /**
@@ -108,24 +108,25 @@ public class CommandManager {
         Member member = event.getMember();
         Guild guild = event.getGuild();
         boolean result = false;
+        assert member != null;
         switch (command.getPermissionLevel()) {
             case EVERYONE:
                 result = true;
 
-            case COMRADE:
-                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("comradeRoleId", 0)))) {
+            case FRIEND:
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.settings.friendRoleId))) {
                     result = true;
                     break;
                 }
 
             case MEMBER:
-                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("memberRoleId", 0)))) {
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.settings.memberRoleId))) {
                     result = true;
                     break;
                 }
 
             case ADMIN:
-                if (member.getRoles().contains(guild.getRoleById(SettingsManager.INSTANCE.loadLongSettingOrDefault("adminRoleId", 0)))) {
+                if (member.getRoles().contains(guild.getRoleById(SettingsManager.settings.adminRoleId))) {
                     result = true;
                     break;
                 }

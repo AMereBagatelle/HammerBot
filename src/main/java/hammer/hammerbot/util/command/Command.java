@@ -13,4 +13,6 @@ public @interface Command {
     String desc();
 
     String[] permittedServers() default {};
+
+    String[] arguments() default {};
 }

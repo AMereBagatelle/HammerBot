@@ -28,9 +28,9 @@ public class ChatListenerMixin {
     public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
         String chatMessage = packet.getChatMessage();
         JDA bot = HammerBot.bot.getBot();
-        TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.INSTANCE.loadLongSettingOrDefault("linkChannelId", 0));
+        TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.settings.linkChannelId);
         if (linkChannel != null) {
-            linkChannel.sendMessage(String.format("[%s] <%s> %s", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"), player.getName().asFormattedString(), chatMessage)).queue();
+            linkChannel.sendMessage(String.format("[%s] <%s> %s", SettingsManager.settings.serverType, player.getName().asFormattedString(), chatMessage)).queue();
         }
     }
 }

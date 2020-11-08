@@ -18,18 +18,19 @@ public class Commands {
 
     @Command(
             desc = "Whitelisting command for servers. Usage: `/whitelist server <add/remove> player`.",
-            permittedServers = {"CMPFLAT", "CMPCOPY", "SMP"}
+            permittedServers = {"CMPFLAT", "CMPCOPY", "SMP"},
+            arguments = {"serverType", "addOrRemove", "player"}
     )
     public static void whitelist(String serverType, String addOrRemove, String player) throws Exception {
-        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+        if (serverType.equalsIgnoreCase(SettingsManager.settings.serverType)) {
             if (addOrRemove.equals("add")) {
                 MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
                 server.enqueueCommand("whitelist add " + player, server.getCommandSource());
-                currentEvent.getChannel().sendMessage(String.format("Player %s added to %s", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
+                currentEvent.getChannel().sendMessage(String.format("Player %s added to %s", player, SettingsManager.settings.serverType)).queue();
             } else if (addOrRemove.equals("remove")) {
                 MinecraftDedicatedServer server = (MinecraftDedicatedServer) FabricLoader.getInstance().getGameInstance();
                 server.enqueueCommand("whitelist remove " + player, server.getCommandSource());
-                currentEvent.getChannel().sendMessage(String.format("Player %s removed from %s.", player, SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP"))).queue();
+                currentEvent.getChannel().sendMessage(String.format("Player %s removed from %s.", player, SettingsManager.settings.serverType)).queue();
             } else {
                 throw new Exception("Invalid argument(s)");
             }
@@ -38,18 +39,19 @@ public class Commands {
 
     @Command(
             desc = "Prints out currently online players on the server.  Usage: `/online server`.",
-            permittedServers = {"SMP", "CMPCOPY", "CMPFLAT"}
+            permittedServers = {"SMP", "CMPCOPY", "CMPFLAT"},
+            arguments = {"serverType"}
     )
     public static void online(String serverType) {
-        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+        if (serverType.equalsIgnoreCase(SettingsManager.settings.serverType)) {
             MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
             String[] players = server.getPlayerManager().getPlayerNames();
-            StringBuilder finalMessage = new StringBuilder(String.format("Currently online players on %s:\n", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
+            StringBuilder finalMessage = new StringBuilder(String.format("Currently online players on %s:\n", SettingsManager.settings.serverType));
             for (String player : players) {
                 finalMessage.append(player).append("\n");
             }
             if (players.length == 0) {
-                finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")));
+                finalMessage = new StringBuilder(String.format("No players currently online on %s!", SettingsManager.settings.serverType));
             }
             currentEvent.getChannel().sendMessage(finalMessage.toString()).queue();
         }
@@ -57,10 +59,11 @@ public class Commands {
 
     @Command(
             desc = "Uploads a file (scarpet script, schematic, etc) that is attached to the message to the server.  Usage: `/uploadFile server` (attach the file you would like to upload).",
-            permittedServers = {"CMPFLAT", "CMPCOPY"}
+            permittedServers = {"CMPFLAT", "CMPCOPY"},
+            arguments = {"serverType"}
     )
     public static void uploadFile(String serverType) {
-        if (serverType.equalsIgnoreCase(SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))) {
+        if (serverType.equalsIgnoreCase(SettingsManager.settings.serverType)) {
             for (Message.Attachment fileAttachment : currentEvent.getMessage().getAttachments()) {
                 String fileExtension = fileAttachment.getFileExtension();
                 if (fileExtension.equals("sc")) {
@@ -74,7 +77,8 @@ public class Commands {
 
     @Command(
             desc = "Shows a scoreboard of the selected objective.  Usage: `/scoreboard objective`",
-            permittedServers = {"SMP"}
+            permittedServers = {"SMP"},
+            arguments = {"objective"}
     )
     public static void scoreboard(String objective) {
         MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
@@ -102,6 +106,6 @@ public class Commands {
             permittedServers = {"SMP", "CMPFLAT", "CMPCOPY"}
     )
     public static void ping() {
-        currentEvent.getChannel().sendMessage(String.format("%s is up!", SettingsManager.INSTANCE.loadSettingOrDefault("serverType", ""))).queue();
+        currentEvent.getChannel().sendMessage(String.format("%s is up!", SettingsManager.settings.serverType)).queue();
     }
 }

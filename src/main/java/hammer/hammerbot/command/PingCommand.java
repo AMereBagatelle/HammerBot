@@ -22,7 +22,8 @@ public class PingCommand {
                 .then(argument("name", StringArgumentType.string()))
                 .executes(ctx -> {
                     String nameToPing = StringArgumentType.getString(ctx, "name");
-                    TextChannel linkChannel = (TextChannel) HammerBot.bot.getBot().getGuildChannelById(SettingsManager.INSTANCE.loadLongSettingOrDefault("linkChannelId", 0));
+                    TextChannel linkChannel = (TextChannel) HammerBot.bot.getBot().getGuildChannelById(SettingsManager.settings.linkChannelId);
+                    assert linkChannel != null;
                     List<Member> matchingMembers = linkChannel.getGuild().getMembersByName(nameToPing, true);
                     if (!matchingMembers.isEmpty()) {
                         linkChannel.sendMessage(matchingMembers.get(0).getAsMention()).queue();

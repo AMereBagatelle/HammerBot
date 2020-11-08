@@ -13,7 +13,7 @@ public class ChatbridgeListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
-        if (event.getChannel().getId().equals(SettingsManager.INSTANCE.loadSettingOrDefault("linkChannelId", "")) && !message.startsWith("[" + SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP") + "]")) {
+        if (event.getChannel().getId().equals(Long.toString(SettingsManager.settings.linkChannelId)) && !message.startsWith("[" + SettingsManager.settings.serverType + "]")) {
             MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
             if (message.startsWith("[SMP]")) {
                 server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[SMP] %s", event.getMessage().getContentRaw().substring(6))), false);

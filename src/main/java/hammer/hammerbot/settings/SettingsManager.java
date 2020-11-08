@@ -1,88 +1,65 @@
 package hammer.hammerbot.settings;
 
+import hammer.hammerbot.HammerBot;
+import net.fabricmc.loader.api.FabricLoader;
+
 import java.io.*;
 import java.util.Properties;
 
 public class SettingsManager {
-    public static SettingsManager INSTANCE = new SettingsManager();
-    public String[][] settings = new String[][]{
-            {"botToken", ""},
-            {"serverType", "SMP"},
-            {"memberRoleId", ""},
-            {"adminRoleId", ""},
-            {"comradeRoleId", ""},
-            {"commandPrefix", "/"},
-            {"linkChannelId", "728334101706440715"}
-    };
 
-    public static File settingsFile = new File("hammerbot.properties");
+    private static final File settingsFile = new File("config/hammerbot.properties");
 
-    public void initSettings() {
-        // Init settings file
-        if(!settingsFile.exists()) {
+    public static SettingsFile settings = new SettingsFile();
+
+    public static void initSettings() {
+        if (!settingsFile.exists()) {
             try {
-                boolean fileCreated = settingsFile.createNewFile();
-
-                if (fileCreated) {
-                    Properties prop = new Properties();
-                    for (String[] setting : settings) {
-                        prop.put(setting[0], setting[1]);
-                    }
-                    BufferedWriter writer = new BufferedWriter(new FileWriter(settingsFile));
-                    prop.store(writer, null);
-                    writer.flush();
-                    writer.close();
-                } else {
-                    throw new IOException();
-                }
+                createDefault();
             } catch (IOException e) {
-                throw new RuntimeException("Could not create settings file for DiscordConnect!");
+                HammerBot.LOGGER.info("Could not create default settings file.");
             }
         }
-        try {
-            Properties settingProperties = new Properties();
-            settingProperties.load(new BufferedReader(new FileReader(settingsFile)));
-            for (String[] setting : settings) {
-                if(!settingProperties.containsKey(setting[0])) {
-                    settingProperties.put(setting[0], setting[1]);
-                }
-            }
-            BufferedWriter writer = new BufferedWriter(new FileWriter(settingsFile));
-            settingProperties.store(writer, null);
-            writer.flush();
-            writer.close();
-        } catch (IOException e) {
-            throw new RuntimeException("Could not read settings file for DiscordConnect!");
-        }
 
-        // Special settings, in the case that we absolutely need something to be set.
-        if (loadSettingOrDefault("botToken", "").length() == 0) throw new RuntimeException("Set a bot token!");
+        loadSettings();
+        validateSettings();
     }
 
-    public String loadSettingOrDefault(String setting, String normal) {
-        BufferedReader reader;
-        Properties prop = new Properties();
-
-        try {
-            reader = new BufferedReader(new FileReader(settingsFile));
-            prop.load(reader);
-            reader.close();
-
-            return prop.getProperty(setting, normal);
+    private static void loadSettings() {
+        try (Reader reader = new FileReader(settingsFile)) {
+            Properties properties = new Properties();
+            properties.load(reader);
+            settings.serverType = properties.getProperty("serverType", settings.serverType);
+            settings.botToken = properties.getProperty("botToken", settings.botToken);
+            settings.commandPrefix = properties.getProperty("commandPrefix", settings.commandPrefix);
+            settings.friendRoleId = Long.parseLong(properties.getProperty("friendRoleId", Long.toString(settings.friendRoleId)));
+            settings.memberRoleId = Long.parseLong(properties.getProperty("memberRoleId", Long.toString(settings.memberRoleId)));
+            settings.adminRoleId = Long.parseLong(properties.getProperty("adminRoleId", Long.toString(settings.adminRoleId)));
+            settings.linkChannelId = Long.parseLong(properties.getProperty("linkChannelId", Long.toString(settings.linkChannelId)));
         } catch (IOException e) {
-            throw new RuntimeException("Can't read settings for DiscordConnect!");
+            throw new RuntimeException("Settings file is broken");
         }
     }
 
-    public boolean loadBooleanSettingOrDefault(String setting, boolean normal) {
-        return Boolean.parseBoolean(loadSettingOrDefault(setting, Boolean.toString(normal)));
+    private static void validateSettings() {
+        if (settings.botToken.length() == 0) throw new RuntimeException("botToken is null, throwing error");
+        if (settings.serverType.length() == 0) HammerBot.LOGGER.info("serverType is not set");
     }
 
-    public int loadIntSettingOrDefault(String setting, int normal) {
-        return Integer.parseInt(loadSettingOrDefault(setting, Integer.toString(normal)));
-    }
+    private static void createDefault() throws IOException {
+        // this will create the config dir for me
+        FabricLoader.getInstance().getConfigDir();
 
-    public long loadLongSettingOrDefault(String setting, long normal) {
-        return Long.parseLong(loadSettingOrDefault(setting, Long.toString(normal)));
+        try (Writer writer = new FileWriter(SettingsManager.settingsFile)) {
+            writer.write("#Configuration File For HammerBot");
+            Properties properties = new Properties();
+            properties.setProperty("serverType", settings.serverType);
+            properties.setProperty("botToken", settings.botToken);
+            properties.setProperty("friendRoleId", Long.toString(settings.friendRoleId));
+            properties.setProperty("memberRoleId", Long.toString(settings.memberRoleId));
+            properties.setProperty("adminRoleId", Long.toString(settings.adminRoleId));
+            properties.setProperty("linkChannelId", Long.toString(settings.linkChannelId));
+            properties.store(writer, null);
+        }
     }
 }

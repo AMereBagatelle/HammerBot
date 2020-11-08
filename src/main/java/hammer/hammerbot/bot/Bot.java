@@ -1,17 +1,15 @@
 package hammer.hammerbot.bot;
 
+import hammer.hammerbot.HammerBot;
 import hammer.hammerbot.settings.SettingsManager;
 import hammer.hammerbot.util.command.CommandManager;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.security.auth.login.LoginException;
 
 public class Bot {
-    private JDA bot;
-    private final Logger LOGGER = LogManager.getLogger();
+    private final JDA bot;
 
     /**
      * Set up the bot.
@@ -19,11 +17,11 @@ public class Bot {
      */
     public Bot() {
         try {
-            bot = JDABuilder.createDefault(SettingsManager.INSTANCE.loadSettingOrDefault("botToken", "")).build();
+            bot = JDABuilder.createDefault(SettingsManager.settings.botToken).build();
             bot.addEventListener(new CommandListener());
             bot.addEventListener(new ChatbridgeListener());
             CommandManager commandManager = CommandManager.INSTANCE;
-            switch (SettingsManager.INSTANCE.loadSettingOrDefault("serverType", "SMP")) {
+            switch (SettingsManager.settings.serverType) {
                 case "SMP":
                     commandManager.registerCommand("whitelist", CommandManager.Roles.ADMIN);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
@@ -41,11 +39,11 @@ public class Bot {
                     break;
 
                 default:
-                    LOGGER.info("Unrecognized server type.");
+                    HammerBot.LOGGER.info("Unrecognized server type.");
             }
             bot.awaitReady();
         } catch (LoginException | InterruptedException e) {
-            LOGGER.info(e.getStackTrace());
+            throw new RuntimeException("Could not log in.");
         }
     }
 
