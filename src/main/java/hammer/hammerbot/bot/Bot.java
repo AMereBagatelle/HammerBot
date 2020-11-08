@@ -31,6 +31,8 @@ public class Bot {
 
                 case "CMPFLAT":
 
+                case "SNAPSHOT":
+
                 case "CMPCOPY":
                     commandManager.registerCommand("whitelist", CommandManager.Roles.MEMBER);
                     commandManager.registerCommand("online", CommandManager.Roles.EVERYONE);
