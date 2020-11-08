@@ -24,7 +24,7 @@ public class PlayerManagerMixin {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.settings.linkChannelId);
         if (linkChannel != null) {
-            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s joined the server", SettingsManager.settings.serverType, player.getDisplayName().asString()))).queue();
+            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s joined the server", SettingsManager.settings.serverType, player.getDisplayName().getString()))).queue();
         }
     }
 
@@ -36,7 +36,7 @@ public class PlayerManagerMixin {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.settings.linkChannelId);
         if (linkChannel != null) {
-            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s left the server", SettingsManager.settings.serverType, player.getDisplayName().asString()))).queue();
+            linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s left the server", SettingsManager.settings.serverType, player.getDisplayName().getString()))).queue();
         }
     }
 }

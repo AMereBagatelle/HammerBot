@@ -19,19 +19,19 @@ public class PingCommand {
 
     public static void register(CommandDispatcher<ServerCommandSource> dispatcher) {
         LiteralArgumentBuilder<ServerCommandSource> ping = literal("ping")
-                .then(argument("name", StringArgumentType.string()))
-                .executes(ctx -> {
-                    String nameToPing = StringArgumentType.getString(ctx, "name");
-                    TextChannel linkChannel = (TextChannel) HammerBot.bot.getBot().getGuildChannelById(SettingsManager.settings.linkChannelId);
-                    assert linkChannel != null;
-                    List<Member> matchingMembers = linkChannel.getGuild().getMembersByName(nameToPing, true);
-                    if (!matchingMembers.isEmpty()) {
-                        linkChannel.sendMessage(matchingMembers.get(0).getAsMention()).queue();
-                    } else {
-                        ctx.getSource().sendFeedback(new LiteralText("Couldn't find members to ping."), false);
-                    }
-                    return 1;
-                });
+                .then(argument("name", StringArgumentType.string())
+                        .executes(ctx -> {
+                            String nameToPing = StringArgumentType.getString(ctx, "name");
+                            TextChannel linkChannel = (TextChannel) HammerBot.bot.getBot().getGuildChannelById(SettingsManager.settings.linkChannelId);
+                            assert linkChannel != null;
+                            List<Member> matchingMembers = linkChannel.getGuild().getMembersByName(nameToPing, true);
+                            if (!matchingMembers.isEmpty()) {
+                                linkChannel.sendMessage(matchingMembers.get(0).getAsMention()).queue();
+                            } else {
+                                ctx.getSource().sendFeedback(new LiteralText("Couldn't find members to ping."), false);
+                            }
+                            return 1;
+                        }));
         dispatcher.register(ping);
     }
 }

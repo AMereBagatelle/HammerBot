@@ -23,7 +23,7 @@ public class ChatListenerMixin {
     /**
      * Passes our chat message to the chat bridge.
      */
-    @Inject(method = "method_31286", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
+    @Inject(method = "method_31286", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Lnet/minecraft/network/MessageType;Ljava/util/UUID;)V"))
     public void onChatMessage(String string, CallbackInfo ci) {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.settings.linkChannelId);
