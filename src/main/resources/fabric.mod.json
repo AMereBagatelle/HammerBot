@@ -19,7 +19,7 @@
     "hammerbot.mixins.json"
   ],
   "depends": {
-    "fabricloader": ">=0.8.7+build.201",
-    "minecraft": "1.15.2"
+    "fabricloader": ">=0.10.6+build.214",
+    "minecraft": "1.16.x"
   }
 }

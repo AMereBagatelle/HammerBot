@@ -6,7 +6,6 @@ import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.entities.TextChannel;
 import net.fabricmc.api.EnvType;
 import net.fabricmc.api.Environment;
-import net.minecraft.network.packet.c2s.play.ChatMessageC2SPacket;
 import net.minecraft.server.network.ServerPlayNetworkHandler;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
@@ -24,13 +23,12 @@ public class ChatListenerMixin {
     /**
      * Passes our chat message to the chat bridge.
      */
-    @Inject(method = "onChatMessage", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
-    public void onChatMessage(ChatMessageC2SPacket packet, CallbackInfo ci) {
-        String chatMessage = packet.getChatMessage();
+    @Inject(method = "method_31286", at = @At(value = "INVOKE", target = "Lnet/minecraft/server/PlayerManager;broadcastChatMessage(Lnet/minecraft/text/Text;Z)V"))
+    public void onChatMessage(String string, CallbackInfo ci) {
         JDA bot = HammerBot.bot.getBot();
         TextChannel linkChannel = (TextChannel) bot.getGuildChannelById(SettingsManager.settings.linkChannelId);
         if (linkChannel != null) {
-            linkChannel.sendMessage(String.format("[%s] <%s> %s", SettingsManager.settings.serverType, player.getName().asFormattedString(), chatMessage)).queue();
+            linkChannel.sendMessage(String.format("[%s] <%s> %s", SettingsManager.settings.serverType, player.getName().asString(), string)).queue();
         }
     }
 }

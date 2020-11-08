@@ -1,11 +1,11 @@
 package hammer.hammerbot.util;
 
 import net.fabricmc.loader.api.FabricLoader;
-import net.minecraft.network.MessageType;
 import net.minecraft.scoreboard.ScoreboardObjective;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.text.LiteralText;
+import net.minecraft.util.Util;
 
 import java.util.Collection;
 
@@ -15,16 +15,16 @@ public class Scoreboards {
         ScoreboardObjective objective = server.getScoreboard().getNullableObjective(name);
         if (objective != null) server.getScoreboard().setObjectiveSlot(1, objective);
         else {
-            player.sendChatMessage(new LiteralText("No objective of that name."), MessageType.SYSTEM);
+            player.sendSystemMessage(new LiteralText("No objective of that name."), Util.NIL_UUID);
         }
     }
 
     public static void listScoreboardObjectives(ServerPlayerEntity player) {
         MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
         Collection<ScoreboardObjective> objectives = server.getScoreboard().getObjectives();
-        player.sendChatMessage(new LiteralText("Objectives:"), MessageType.SYSTEM);
+        player.sendSystemMessage(new LiteralText("Objectives:"), Util.NIL_UUID);
         for (ScoreboardObjective objective : objectives) {
-            player.sendChatMessage(new LiteralText(objective.getName()), MessageType.SYSTEM);
+            player.sendSystemMessage(new LiteralText(objective.getName()), Util.NIL_UUID);
         }
     }
 
