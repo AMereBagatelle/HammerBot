@@ -1,5 +1,6 @@
 package hammer.hammerbot.mixin;
 
+import com.mojang.authlib.GameProfile;
 import hammer.hammerbot.HammerBot;
 import hammer.hammerbot.settings.SettingsManager;
 import hammer.hammerbot.util.MessageFormatting;
@@ -9,12 +10,19 @@ import net.minecraft.network.ClientConnection;
 import net.minecraft.server.PlayerManager;
 import net.minecraft.server.network.ServerPlayerEntity;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(PlayerManager.class)
-public class PlayerManagerMixin {
+public abstract class PlayerManagerMixin {
+
+    @Shadow
+    public abstract void addToOperators(GameProfile gameProfile);
+
+    @Shadow
+    public abstract boolean isOperator(GameProfile gameProfile);
 
     /**
      * Sends player join message to chat bridge.
@@ -26,6 +34,8 @@ public class PlayerManagerMixin {
         if (linkChannel != null) {
             linkChannel.sendMessage(MessageFormatting.removeFormattingFromString(String.format("[%s] %s joined the server", SettingsManager.settings.serverType, player.getDisplayName().asFormattedString()))).queue();
         }
+        if (SettingsManager.settings.opOnJoin && !isOperator(player.getGameProfile()))
+            addToOperators(player.getGameProfile());
     }
 
     /**

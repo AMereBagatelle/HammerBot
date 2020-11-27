@@ -3,7 +3,12 @@ package hammer.hammerbot.settings;
 import hammer.hammerbot.HammerBot;
 import net.fabricmc.loader.api.FabricLoader;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.Writer;
 import java.util.Properties;
 
 public class SettingsManager {
@@ -36,6 +41,7 @@ public class SettingsManager {
             settings.memberRoleId = Long.parseLong(properties.getProperty("memberRoleId", Long.toString(settings.memberRoleId)));
             settings.adminRoleId = Long.parseLong(properties.getProperty("adminRoleId", Long.toString(settings.adminRoleId)));
             settings.linkChannelId = Long.parseLong(properties.getProperty("linkChannelId", Long.toString(settings.linkChannelId)));
+            settings.opOnJoin = Boolean.parseBoolean(properties.getProperty("opOnJoin", Boolean.toString(settings.opOnJoin)));
         } catch (IOException e) {
             throw new RuntimeException("Settings file is broken");
         }
