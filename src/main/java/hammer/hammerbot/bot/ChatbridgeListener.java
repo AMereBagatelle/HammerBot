@@ -18,13 +18,13 @@ public class ChatbridgeListener extends ListenerAdapter {
         if (event.getChannel().getId().equals(Long.toString(SettingsManager.settings.linkChannelId)) && !message.startsWith("[" + SettingsManager.settings.serverType + "]")) {
             MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
             if (message.startsWith("[SMP]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[SMP] %s", event.getMessage().getContentRaw().substring(6))), MessageType.SYSTEM, Util.NIL_UUID);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[§aSMP§r] %s", event.getMessage().getContentRaw().substring(6))), MessageType.SYSTEM, Util.NIL_UUID);
             } else if (message.startsWith("[CMPFLAT]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPFLAT] %s", event.getMessage().getContentRaw().substring(10))), MessageType.SYSTEM, Util.NIL_UUID);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[§6CMPFLAT§r] %s", event.getMessage().getContentRaw().substring(10))), MessageType.SYSTEM, Util.NIL_UUID);
             } else if (message.startsWith("[CMPCOPY]")) {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[CMPCOPY] %s", event.getMessage().getContentRaw().substring(10))), MessageType.SYSTEM, Util.NIL_UUID);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[§cCMPCOPY§r] %s", event.getMessage().getContentRaw().substring(10))), MessageType.SYSTEM, Util.NIL_UUID);
             } else {
-                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[DISCORD] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw())), MessageType.SYSTEM, Util.NIL_UUID);
+                server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[§bDISCORD§r] <%s> %s", event.getAuthor().getName(), event.getMessage().getContentRaw())), MessageType.SYSTEM, Util.NIL_UUID);
             }
         }
     }
