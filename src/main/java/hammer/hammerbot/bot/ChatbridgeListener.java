@@ -1,5 +1,6 @@
 package hammer.hammerbot.bot;
 
+import hammer.hammerbot.HammerBot;
 import hammer.hammerbot.settings.SettingsManager;
 import net.dv8tion.jda.api.events.message.MessageReceivedEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
@@ -15,7 +16,7 @@ public class ChatbridgeListener extends ListenerAdapter {
     @Override
     public void onMessageReceived(@Nonnull MessageReceivedEvent event) {
         String message = event.getMessage().getContentRaw();
-        if (event.getChannel().getId().equals(Long.toString(SettingsManager.settings.linkChannelId)) && !message.startsWith("[" + SettingsManager.settings.serverType + "]")) {
+        if (event.getChannel().getId().equals(Long.toString(SettingsManager.settings.linkChannelId)) && !message.startsWith("[" + SettingsManager.settings.serverType + "]") && event.getAuthor() == HammerBot.bot.getBot().getSelfUser()) {
             MinecraftServer server = (MinecraftServer) FabricLoader.getInstance().getGameInstance();
             if (message.startsWith("[SMP]")) {
                 server.getPlayerManager().broadcastChatMessage(new LiteralText(String.format("[§aSMP§r] %s", event.getMessage().getContentRaw().substring(6))), MessageType.SYSTEM, Util.NIL_UUID);
