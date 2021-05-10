@@ -8,4 +8,5 @@ public class SettingsFile {
     public long friendRoleId = 0;
     public String commandPrefix = "/";
     public long linkChannelId = 0;
+    public boolean opOnJoin = false;
 }
